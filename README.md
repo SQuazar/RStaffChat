@@ -1,4 +1,7 @@
 # RStaffChat - Распределённый стафф-чат!
+<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/b3d792b7-42c4-47b7-b66c-d9e931469763" />
+
+## Общая информация
 
 RStaffChat реализует распределённую систему на основе Redis Pub/Sub,
 что делает его максимально гибким к любой интеграции (Discord, Telegram, etc..) \
