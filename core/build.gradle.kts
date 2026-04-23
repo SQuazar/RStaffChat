@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "net.nullpointer.rstaffchat"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -15,15 +14,17 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+    withSourcesJar()
+    withJavadocJar()
 }
 
 dependencies {
     api(project(":api"))
-    implementation("com.google.code.gson:gson:2.13.2")
-    implementation("io.lettuce:lettuce-core:7.5.1.RELEASE")
+    implementation(libs.gson)
+    implementation(libs.lettuce)
 
-    compileOnly("org.projectlombok:lombok:1.18.44")
-    annotationProcessor("org.projectlombok:lombok:1.18.44")
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -35,6 +36,7 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["java"])
             artifactId = "core"
+            version = rootProject.version as String
         }
     }
 }

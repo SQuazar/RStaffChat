@@ -1,10 +1,9 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "9.4.1"
+    alias(libs.plugins.shadow)
 }
 
 group = "net.nullpointer.rstaffchat"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -25,11 +24,11 @@ repositories {
 dependencies {
     implementation(project(":core"))
 
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
-    compileOnly("me.clip:placeholderapi:2.12.2")
-    compileOnly("org.projectlombok:lombok:1.18.44")
+    compileOnly(libs.paper)
+    compileOnly(libs.placeholderapi)
+    compileOnly(libs.lombok)
 
-    annotationProcessor("org.projectlombok:lombok:1.18.44")
+    annotationProcessor(libs.lombok)
 }
 
 val targetJavaVersion = 17
@@ -47,7 +46,15 @@ tasks.withType<JavaCompile>().configureEach {
     }
 }
 
+tasks.jar {
+    enabled = false
+}
+
 tasks.shadowJar {
+    archiveBaseName = "RStaffChat"
+    archiveVersion = rootProject.version.toString()
+    archiveClassifier.set("")
+
     relocate("io.netty", "net.nullpointer.rstaffchat.shade.netty")
     relocate("io.lettuce", "net.nullpointer.rstaffchat.shade.lettuce")
     relocate("com.google", "net.nullpointer.rstaffchat.shade.google")
@@ -58,7 +65,7 @@ tasks.shadowJar {
 }
 
 tasks.processResources {
-    val props = mapOf("version" to project.version)
+    val props = mapOf("version" to rootProject.version)
 
     inputs.properties(props)
     filteringCharset = "UTF-8"

@@ -1,4 +1,13 @@
-package net.nullpointer.rstaffchat.core.event;
+package net.nullpointer.rstaffchat.core;
 
-public class RedisEventEnvelope {
+import lombok.Data;
+
+import java.util.UUID;
+
+@Data
+class RedisEventEnvelope {
+    private final UUID id;
+    private final UUID source;
+    private final String type;
+    private final String payload;
 }

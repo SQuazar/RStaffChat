@@ -1,11 +1,17 @@
 name: RStaffChat
-version: '1.0-SNAPSHOT'
-main: net.nullpointer.rstaffchat.RStaffChat
-api-version: '1.20'
+version: '${version}'
+main: net.nullpointer.rstaffchat.plugin.RStaffChatPlugin
+api-version: '1.19'
 authors: [ NullPointer ]
 description: RStaffChat - Staff Chat via Redis
+softdepend:
+  - PlaceholderAPI
 commands:
   staff:
     usage: /staff [message]
     description: Staff message via redis
-    permission: rstaff.use
+    permission: rstaff.chat
+  rstaff:
+    usage: /rstaff
+    description: Reload config
+    permission: rstaff.admin

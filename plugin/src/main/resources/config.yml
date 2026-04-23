@@ -1,2 +1,5 @@
 server-name: MC-1
 redis-uri: redis://localhost:6379
+
+# Только MiniMessage Format
+format: "<red>[<source>] [STAFF] <gray><sender> -> <yellow><message>"

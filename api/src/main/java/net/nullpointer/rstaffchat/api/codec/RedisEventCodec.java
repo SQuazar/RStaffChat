@@ -1,14 +1,35 @@
-package net.nullpointer.rstaffchat.api;
+package net.nullpointer.rstaffchat.api.codec;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import net.nullpointer.rstaffchat.api.event.RedisEvent;
 
+/**
+ * Redis event codec
+ * @param <T> redis event type
+ */
 public interface RedisEventCodec<T extends RedisEvent> {
+    /**
+     * Gets event type (staff.chat for example). codec and event type equality is required
+     * @return event type
+     */
     String type();
 
+    /**
+     * Gets event class
+     * @return event class type
+     */
     Class<T> eventClass();
 
-    JsonElement encodePayload(T event, Gson gson);
+    /**
+     * Encode event to json
+     * @param event redis event instance
+     * @return encoded json string
+     */
+    String encodePayload(T event);
 
-    T decodePayload(JsonElement json, Gson gson);
+    /**
+     * Decode json to redis event instance
+     * @param json json event body
+     * @return decoded redis event
+     */
+    T decodePayload(String json);
 }
