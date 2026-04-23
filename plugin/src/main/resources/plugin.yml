@@ -1,0 +1,11 @@
+name: RStaffChat
+version: '1.0-SNAPSHOT'
+main: net.nullpointer.rstaffchat.RStaffChat
+api-version: '1.20'
+authors: [ NullPointer ]
+description: RStaffChat - Staff Chat via Redis
+commands:
+  staff:
+    usage: /staff [message]
+    description: Staff message via redis
+    permission: rstaff.use
