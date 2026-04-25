@@ -46,7 +46,7 @@ public final class RStaffChatPlugin extends JavaPlugin {
                 getLogger().warning("Published at: %s".formatted(FORMAT.format(info.publishedAt())));
                 if (info.preRelease())
                     getLogger().warning("This is pre release version!");
-            }
+            } else getLogger().info("You used latest version!");
         });
     }
 
