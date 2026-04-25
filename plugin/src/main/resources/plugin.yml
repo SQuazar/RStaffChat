@@ -7,10 +7,6 @@ description: RStaffChat - Staff Chat via Redis
 softdepend:
   - PlaceholderAPI
 commands:
-  staff:
-    usage: /staff [message]
-    description: Staff message via redis
-    permission: rstaff.chat
   rstaff:
     usage: /rstaff
     description: Reload config

@@ -20,8 +20,8 @@ java {
 
 dependencies {
     api(project(":api"))
-    implementation(libs.gson)
-    implementation(libs.lettuce)
+    api(libs.gson)
+    api(libs.lettuce)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
