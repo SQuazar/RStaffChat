@@ -19,6 +19,7 @@ public class StaffChatMessageRedisEvent implements RedisEvent {
     public static final String EVENT_TYPE = "staff.chat";
 
     private final String source;
+    private final ChatInfo chatInfo;
     private final String groupPrefix;
     private final String senderName;
     private final UUID senderUuid;
@@ -27,13 +28,16 @@ public class StaffChatMessageRedisEvent implements RedisEvent {
     /**
      * Event constructor
      * @param source where the message was sent from
+     * @param chatInfo info about chat
      * @param groupPrefix sender group prefix
      * @param senderName sender name
      * @param senderUuid sender uuid
      * @param message message
      */
-    public StaffChatMessageRedisEvent(String source, String groupPrefix, String senderName, UUID senderUuid, String message) {
+    public StaffChatMessageRedisEvent(String source, ChatInfo chatInfo,
+                                      String groupPrefix, String senderName, UUID senderUuid, String message) {
         this.source = source;
+        this.chatInfo = chatInfo;
         this.groupPrefix = groupPrefix;
         this.senderName = senderName;
         this.senderUuid = senderUuid;
@@ -43,13 +47,15 @@ public class StaffChatMessageRedisEvent implements RedisEvent {
     /**
      * Event constructor
      * @param source where the message was sent from
+     * @param chatInfo info about chat
      * @param senderName sender name
      * @param senderUuid sender uuid
      * @param message message
      */
-    public StaffChatMessageRedisEvent(String source, String senderName, UUID senderUuid, String message) {
-        this.groupPrefix = null;
+    public StaffChatMessageRedisEvent(String source, ChatInfo chatInfo, String senderName, UUID senderUuid, String message) {
         this.source = source;
+        this.chatInfo = chatInfo;
+        this.groupPrefix = null;
         this.senderName = senderName;
         this.senderUuid = senderUuid;
         this.message = message;
@@ -90,5 +96,13 @@ public class StaffChatMessageRedisEvent implements RedisEvent {
         public StaffChatMessageRedisEvent decodePayload(String json) {
             return gson.fromJson(json, StaffChatMessageRedisEvent.class);
         }
+    }
+
+    /**
+     * Chat info data class
+     * @param id chat id
+     * @param permission permission for view chat messages
+     */
+    public record ChatInfo(String id, String permission) {
     }
 }
