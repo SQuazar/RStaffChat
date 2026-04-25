@@ -5,6 +5,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.nullpointer.rstaffchat.api.RStaffChatAPI;
 import net.nullpointer.rstaffchat.core.event.StaffChatMessageRedisEvent;
+import net.nullpointer.rstaffchat.plugin.config.Chat;
 import net.nullpointer.rstaffchat.plugin.config.RStaffConfig;
 import net.nullpointer.rstaffchat.plugin.util.ExternalPlaceholderProvider;
 import net.nullpointer.rstaffchat.plugin.util.LegacyColor;
@@ -27,19 +28,24 @@ public class StaffChatServiceImpl implements StaffChatService {
     public StaffChatServiceImpl(RStaffChatAPI api, RStaffConfig config) {
         this.api = api;
         this.config = config;
-        api.subscriber().subscribe(EVENT_TYPE, StaffChatMessageRedisEvent.class, event ->
-                broadcast(event.getSource(), event.getGroupPrefix(), event.getSenderName(), event.getMessage())
-        );
+        api.subscriber().subscribe(EVENT_TYPE, StaffChatMessageRedisEvent.class, event -> {
+            Chat chat = config.findChat(event.getChatInfo().id()).orElse(null);
+            if (chat == null && config.isAllowUnknown())
+                chat = Chat.fromId(event.getChatInfo().id());
+            if (chat == null) return;
+            broadcast(event.getSource(), chat, event.getGroupPrefix(), event.getSenderName(), event.getMessage());
+        });
 
         this.placeholderProvider = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null ?
                 new PlaceholderAPIProvider() : ExternalPlaceholderProvider.NONE;
     }
 
     @Override
-    public void broadcastStaff(Player player, String message) {
-        broadcast(config.getSourceName(), null, player.getName(), message);
+    public void broadcastStaff(Player player, Chat chat, String message) {
+        broadcast(config.getSourceName(), chat, null, player.getName(), message);
         api.publisher().publish(new StaffChatMessageRedisEvent(
                 config.getSourceName(),
+                new StaffChatMessageRedisEvent.ChatInfo(chat.id(), chat.permission()),
                 player.getName(),
                 player.getUniqueId(),
                 message
@@ -47,10 +53,11 @@ public class StaffChatServiceImpl implements StaffChatService {
     }
 
     @Override
-    public void broadcastStaff(ConsoleCommandSender sender, String message) {
-        broadcast(config.getSourceName(), null, sender.getName(), message);
+    public void broadcastStaff(ConsoleCommandSender sender, Chat chat, String message) {
+        broadcast(config.getSourceName(), chat, null, sender.getName(), message);
         api.publisher().publish(new StaffChatMessageRedisEvent(
                 config.getSourceName(),
+                new StaffChatMessageRedisEvent.ChatInfo(chat.id(), chat.permission()),
                 sender.getName(),
                 RStaffChatAPI.SERVICE_UUID,
                 message
@@ -58,20 +65,21 @@ public class StaffChatServiceImpl implements StaffChatService {
     }
 
     @Override
-    public void broadcastStaff(RemoteConsoleCommandSender sender, String message) {
-        broadcast(config.getSourceName(), null, sender.getName(), message);
+    public void broadcastStaff(RemoteConsoleCommandSender sender, Chat chat, String message) {
+        broadcast(config.getSourceName(), chat, null, sender.getName(), message);
         api.publisher().publish(new StaffChatMessageRedisEvent(
                 config.getSourceName(),
+                new StaffChatMessageRedisEvent.ChatInfo(chat.id(), chat.permission()),
                 sender.getName(),
                 RStaffChatAPI.SERVICE_UUID,
                 message
         ));
     }
 
-    private void broadcast(String source, String group, String senderName, String message) {
-        Component msg = format(config.getFormat(), source, group, senderName, message);
+    private void broadcast(String source, Chat chat, String group, String senderName, String message) {
+        Component msg = format(chat.format(), source, group, senderName, message);
         Bukkit.getOnlinePlayers().stream()
-                .filter(p -> p.hasPermission("rstaff.chat"))
+                .filter(p -> p.hasPermission(chat.permission()))
                 .forEach(p -> p.sendMessage(msg));
         Bukkit.getConsoleSender().sendMessage(msg);
     }
