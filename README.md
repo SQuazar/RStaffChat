@@ -30,8 +30,19 @@ services:
 server-name: MC-1
 redis-uri: redis://localhost:6379
 
+# Разрешить выводить сообщения из чатов, которые не были настроены на этом сервере
+allow-unknown-chats: true
+
 # Только MiniMessage Format
-format: "<red>[<source>] [STAFF] <gray><sender> -> <yellow><message>"
+chat:
+  staff:
+    format: "<red>[<source>] [STAFF] <gray><sender> -> <yellow><message>"
+    alias: [ sc ]
+    permission: rstaff.chat
+  staffdev:
+    format: "<red>[<source>] <purple>[DEV]</purple> <gray><sender> -> <yellow><message>"
+    alias: [ scd ]
+    permission: rstaff.chat.dev
 ```
 
 > [!TIP]
@@ -53,6 +64,7 @@ format: "<red>[<source>] [STAFF] <gray><sender> -> <yellow><message>"
 * Поддержка PlaceholderAPI
 * Полная поддержка MiniMessage
 * Легок для расширения независимо от платформы, можно подключить своё ПО, которое будет работать с событиями плагина
+* Возможность создавать неограниченное количество стафф-чатов
 
 ## Команды и права
 
