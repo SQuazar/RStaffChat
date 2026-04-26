@@ -1,4 +1,8 @@
 # RStaffChat - Распределённый стафф-чат!
+![GitHub Release](https://img.shields.io/github/v/release/SQuazar/RStaffChat)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/SQuazar/RStaffChat)
+![GitHub Repo stars](https://img.shields.io/github/stars/SQuazar/RStaffChat)
+
 <img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/b3d792b7-42c4-47b7-b66c-d9e931469763" />
 
 ## Общая информация
