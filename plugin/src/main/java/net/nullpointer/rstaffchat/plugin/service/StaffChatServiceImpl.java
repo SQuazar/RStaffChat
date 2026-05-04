@@ -8,7 +8,6 @@ import net.nullpointer.rstaffchat.core.event.StaffChatMessageRedisEvent;
 import net.nullpointer.rstaffchat.plugin.config.Chat;
 import net.nullpointer.rstaffchat.plugin.config.RStaffConfig;
 import net.nullpointer.rstaffchat.plugin.util.ExternalPlaceholderProvider;
-import net.nullpointer.rstaffchat.plugin.util.LegacyColor;
 import net.nullpointer.rstaffchat.plugin.util.PlaceholderAPIProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
