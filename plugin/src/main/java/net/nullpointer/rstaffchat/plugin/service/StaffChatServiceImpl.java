@@ -84,21 +84,22 @@ public class StaffChatServiceImpl implements StaffChatService {
         Bukkit.getConsoleSender().sendMessage(msg);
     }
 
-    private Component format(String s, String source, String group, String senderName, String message) {
-        Player player;
-        if ((player = Bukkit.getPlayerExact(senderName)) != null)
-            s = placeholderProvider.setPlaceholders(player, s);
-        else s = PAPI_PATTERN.matcher(s).replaceAll("");
+    private Component format(String format, String source, String group, String senderName, String message) {
+        if (Bukkit.getPlayerExact(source) == null)
+            format = PAPI_PATTERN.matcher(format).replaceAll("");
 
-        s = LegacyColor.normalizeMm(s);
-
-        return MiniMessage.miniMessage().deserialize(
-                s,
+        Component msg = MiniMessage.miniMessage().deserialize(
+                format,
                 Placeholder.parsed("group", Optional.ofNullable(group).orElse("")),
                 Placeholder.parsed("source", source),
                 Placeholder.parsed("sender", senderName),
-                Placeholder.parsed("message", message)
+                Placeholder.unparsed("message", message)
         );
+        Player player;
+        if ((player = Bukkit.getPlayerExact(senderName)) != null)
+            msg = placeholderProvider.setPlaceholders(player, msg);
+
+        return msg;
     }
 
     private static final Pattern PAPI_PATTERN =
